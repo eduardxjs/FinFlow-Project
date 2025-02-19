@@ -7,7 +7,7 @@ let transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
 // Configuração da paginação
 const transacoesPorPagina = 10;
 let paginaAtual = 1;
-let transacoesFiltradas = [];
+let transacoesFiltradas = transacoes;
 
 // Pegando os elementos da página onde os totais e transações serão exibidos
 const saldoElemento = document.getElementById('saldo');
@@ -46,15 +46,15 @@ function adicionarTransacao(event) {
     localStorage.setItem('transacoes', JSON.stringify(transacoes));
 
     atualizarInterface();
-    limparFormulario(); // Chamando a função para limpar os campos do formulário
+    limparFormulario();
 }
 
 // Função para limpar o formulário após uma transação ser adicionada
 function limparFormulario() {
     document.getElementById('descricao').value = '';
     document.getElementById('valor').value = '';
-    document.getElementById('tipo').value = 'entrada'; // Resetando o tipo para "entrada"
-    document.getElementById('categoria').value = 'servicos_cabelo'; // Resetando a categoria para a primeira opção
+    document.getElementById('tipo').value = 'entrada';
+    document.getElementById('categoria').value = 'servicos_cabelo';
 }
 
 // Função para atualizar a interface com os totais
@@ -86,7 +86,7 @@ function atualizarHistorico() {
 
     const inicio = (paginaAtual - 1) * transacoesPorPagina;
     const fim = inicio + transacoesPorPagina;
-    const transacoesPaginadas = transacoes.slice().reverse().slice(inicio, fim);
+    const transacoesPaginadas = transacoesFiltradas.slice().reverse().slice(inicio, fim);
 
     transacoesPaginadas.forEach(transacao => {
         const li = document.createElement('li');
@@ -95,7 +95,7 @@ function atualizarHistorico() {
         listaHistorico.appendChild(li);
     });
 
-    const totalPaginas = Math.ceil(transacoes.length / transacoesPorPagina);
+    const totalPaginas = Math.ceil(transacoesFiltradas.length / transacoesPorPagina);
     for (let i = 1; i <= totalPaginas; i++) {
         const botao = document.createElement('button');
         botao.textContent = i;
@@ -114,7 +114,7 @@ function atualizarHistorico() {
 filtroHistorico.addEventListener('input', function () {
     const filtro = filtroHistorico.value;
     paginaAtual = 1;
-    transacoesFiltradas = transacoes.filter(transacao => transacao.data === filtro);
+    transacoesFiltradas = filtro ? transacoes.filter(transacao => transacao.data === filtro) : transacoes; // A "?" Equivale ao IF e ELSE
     atualizarHistorico();
 });
 
@@ -123,6 +123,7 @@ limparHistoricoBtn.addEventListener('click', function () {
     const filtro = filtroHistorico.value;
     transacoes = transacoes.filter(transacao => transacao.data !== filtro);
     localStorage.setItem('transacoes', JSON.stringify(transacoes));
+    transacoesFiltradas = transacoes;
     atualizarHistorico();
 });
 
@@ -130,6 +131,7 @@ limparHistoricoBtn.addEventListener('click', function () {
 limparHistoricoBt.addEventListener('click', function () {
     transacoes = [];
     localStorage.removeItem('transacoes');
+    transacoesFiltradas = [];
     atualizarHistorico();
 });
 
