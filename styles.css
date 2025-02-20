@@ -79,12 +79,12 @@ li:hover {
 /* Estilo para transações de entrada e saída */
 li.entrada {
     background-color: #d4f1d4;
-    color: #00FF00;
+    color: #006d27;
 }
 
 li.saida {
     background-color: #f1d4d4;
-    color: #FF0000;
+    color: #d31313;
 }
 
 /* Estilo para a seção de totais */
