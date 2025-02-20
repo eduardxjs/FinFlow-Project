@@ -50,8 +50,8 @@ button:hover {
 /* Estilo para inputs e selects */
 input,
 select {
-    width: 100%;
-    padding: 12px;
+    width: 97%;
+    padding: 9px;
     margin-bottom: 12px;
     border-radius: 6px;
     border: 1px solid #ccc;
